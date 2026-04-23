@@ -1,957 +1,732 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'}
-    span.s1 {font: 12.0px Helvetica}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Activity Organizer | Gesinaktiwiteit-organiseerder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .language-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="time"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .other-driver-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            justify-content: flex-end;
+        }
+
+        button {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .btn-reset:hover {
+            background: #efefef;
+        }
+
+        .success-message {
+            display: none;
+            background: #4caf50;
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .error-message {
+            display: none;
+            background: #f44336;
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .helper-text {
+            font-size: 0.85em;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .time-section {
+            background: #f9f9f9;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #764ba2;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button-group button {
+                width: 100%;
+            }
+
+            .language-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Family Activity Organizer | Gesinaktiwiteit-organiseerder&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>* {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #333;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 900px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>header {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: slideDown 0.6s ease-out;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.language-toggle {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.2);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.lang-btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 8px 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: transparent;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.lang-btn.active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.3);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.lang-btn:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.2);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>header h1 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2.5em;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-shadow: 0 2px 10px rgba(0,0,0,0.2);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>header p {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: rgba(255,255,255,0.9);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.1em;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 20px 60px rgba(0,0,0,0.3);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: slideUp 0.6s ease-out;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-section {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-section:last-child {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.section-title {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.2em;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #667eea;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.section-title::before {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>content: '';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #667eea;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 2px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-row {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: 1fr 1fr;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-row.full {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: 1fr;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-group {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>label {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #333;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.95em;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="text"],</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="date"],</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="time"],</p>
-<p class="p1"><span class="Apple-converted-space">        </span>select,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>textarea {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 12px 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #e0e0e0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1em;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: inherit;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="text"]:focus,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="date"]:focus,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="time"]:focus,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>select:focus,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>textarea:focus {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>outline: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: #667eea;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>textarea {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>resize: vertical;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>min-height: 80px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkbox-group {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkbox-item {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="checkbox"] {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>accent-color: #667eea;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkbox-item label {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 400;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.other-driver-section {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-top: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-top: 1px solid #e0e0e0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.button-group {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: flex-end;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>button {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 14px 32px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1em;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-submit {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex: 1;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-submit:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-2px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-submit:active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(0);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-reset {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #f5f5f5;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #666;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-reset:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #efefef;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.success-message {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #4caf50;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: slideDown 0.4s ease-out;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.error-message {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #f44336;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: slideDown 0.4s ease-out;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.helper-text {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.85em;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #999;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.time-section {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #f9f9f9;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-left: 4px solid #764ba2;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes slideDown {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>from {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>opacity: 0;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>transform: translateY(-20px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>to {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>opacity: 1;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>transform: translateY(0);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes slideUp {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>from {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>opacity: 0;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>transform: translateY(20px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>to {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>opacity: 1;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>transform: translateY(0);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 768px) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>header h1 {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>font-size: 1.8em;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.form-container {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>padding: 25px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.form-row {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grid-template-columns: 1fr;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.button-group {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.button-group button {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.language-toggle {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.loading {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #667eea;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.spinner {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 4px solid #f3f3f3;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-top: 4px solid #667eea;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: spin 1s linear infinite;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes spin {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: rotate(0deg); }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: rotate(360deg); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="language-toggle"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="lang-btn active" id="langEN" onclick="setLanguage('en')"&gt;English&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="lang-btn" id="langAF" onclick="setLanguage('af')"&gt;Afrikaans&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1&gt;📅 &lt;span id="title"&gt;Family Activity Organizer&lt;/span&gt;&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p id="subtitle"&gt;Coordinate activities for the whole family&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="form-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="success-message" id="successMessage"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>✓ &lt;span id="successText"&gt;Activity added successfully!&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="error-message" id="errorMessage"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;form id="activityForm"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- CHILD INFORMATION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="form-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="section-title"&gt;&lt;span id="childInfoTitle"&gt;Child Information&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="childName" id="childNameLabel"&gt;Child's Name *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;select id="childName" name="childName" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value=""&gt;Select a child...&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Wiehan"&gt;Wiehan&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Nieke"&gt;Nieke&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Anlia"&gt;Anlia&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- ACTIVITY DETAILS --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="form-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="section-title"&gt;&lt;span id="activityDetailsTitle"&gt;Activity Details&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="activityType" id="activityTypeLabel"&gt;Activity Type *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;select id="activityType" name="activityType" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value=""&gt;Select activity...&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Rugby"&gt;🏉 Rugby&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Netball"&gt;🏀 Netball&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Hockey"&gt;🏑 Hockey&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Math Extra Class"&gt;📐 Math Extra Class&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Music Lesson"&gt;🎵 Music Lesson&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Swimming"&gt;🏊 Swimming&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Tennis"&gt;🎾 Tennis&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Dance"&gt;💃 Dance&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Tutoring"&gt;📚 Tutoring&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;option value="Other"&gt;📌 Other&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="otherActivity" id="otherActivityLabel"&gt;Activity Name (if Other)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="text" id="otherActivity" name="otherActivity" placeholder="e.g., Piano Lesson"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- DATE &amp; TIME --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="form-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="section-title"&gt;&lt;span id="dateTimeTitle"&gt;Date &amp; Time&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="activityDate" id="dateLabel"&gt;Date *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="date" id="activityDate" name="activityDate" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="time-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="startTime" id="startTimeLabel"&gt;Start Time *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="time" id="startTime" name="startTime" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="endTime" id="endTimeLabel"&gt;End Time *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="time" id="endTime" name="endTime" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- RECURRENCE --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="form-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="section-title"&gt;&lt;span id="recurrenceTitle"&gt;Recurrence (Optional)&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-row full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="checkbox" id="isRecurring" name="isRecurring"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;span id="makeRecurringLabel"&gt;Make this a recurring activity&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="helper-text" id="recurringHelperText"&gt;Check to repeat this activity every week until a specific date&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="recurrenceOptions" style="display: none;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="time-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="form-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;label for="recurrenceEndDate" id="endDateLabel"&gt;Repeat until (end date) *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;input type="date" id="recurrenceEndDate" name="recurrenceEndDate"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div class="helper-text" id="endDateHelperText"&gt;e.g., end of school term (Nov 30), or last activity date&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;label id="daysLabel"&gt;Days to repeat on *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div class="checkbox-group" style="grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;input type="checkbox" id="recurMon" name="recurDays" value="1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;label for="recurMon" id="monLabel"&gt;Monday&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;input type="checkbox" id="recurTue" name="recurDays" value="2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;label for="recurTue" id="tueLabel"&gt;Tuesday&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;input type="checkbox" id="recurWed" name="recurDays" value="3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;label for="recurWed" id="wedLabel"&gt;Wednesday&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;input type="checkbox" id="recurThu" name="recurDays" value="4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;label for="recurThu" id="thuLabel"&gt;Thursday&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;input type="checkbox" id="recurFri" name="recurDays" value="5"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;label for="recurFri" id="friLabel"&gt;Friday&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;input type="checkbox" id="recurSat" name="recurDays" value="6"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;label for="recurSat" id="satLabel"&gt;Saturday&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;input type="checkbox" id="recurSun" name="recurDays" value="0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                            </span>&lt;label for="recurSun" id="sunLabel"&gt;Sunday&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;div class="helper-text" id="daysHelperText"&gt;Select which days of the week to repeat this activity&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- REMEMBER TO BRING --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="form-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="section-title"&gt;&lt;span id="bringTitle"&gt;What to Bring&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-row full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="rememberToBring" id="bringLabel"&gt;Remember to bring...&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;textarea id="rememberToBring" name="rememberToBring" placeholder="e.g., Water bottle, rugby boots, shin guards, permission slip" style="min-height: 60px;"&gt;&lt;/textarea&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="helper-text" id="bringHelperText"&gt;Items to bring to this activity. Will be included in reminder notifications.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- LOCATION &amp; CONTACT --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="form-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="section-title"&gt;&lt;span id="locationTitle"&gt;Location &amp; Contact&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-row full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="location" id="locationLabel"&gt;Location/Venue *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="text" id="location" name="location" placeholder="e.g., Green Fields Sports Complex, Room 5 at School" required&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="helper-text" id="locationHelperText"&gt;Include address or specific venue name&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-row full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="contactPerson" id="contactPersonLabel"&gt;Contact Person at Venue&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="text" id="contactPerson" name="contactPerson" placeholder="e.g., Coach Mike, Mrs. Johnson"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-row full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="contactPhone" id="contactPhoneLabel"&gt;Contact Phone (if applicable)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="text" id="contactPhone" name="contactPhone" placeholder="+27 21 555 1234"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- RESPONSIBILITIES --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="form-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="section-title"&gt;&lt;span id="responsibilitiesTitle"&gt;Responsibilities&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label id="dropoffLabel"&gt;Drop-off Responsible Person(s) *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="checkbox-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="checkbox" id="dropoff_charindie" name="dropoffResponsible" value="Charindie"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="dropoff_charindie"&gt;Charindie&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="checkbox" id="dropoff_jg" name="dropoffResponsible" value="JG"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="dropoff_jg"&gt;JG&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="checkbox" id="dropoff_annelies" name="dropoffResponsible" value="Annelies"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="dropoff_annelies"&gt;Annelies&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="checkbox" id="dropoff_grandparent" name="dropoffResponsible" value="Grandparent"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="dropoff_grandparent" id="grandparentLabel"&gt;Grandparent&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="other-driver-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="dropoffOther" id="otherDropoffLabel"&gt;Other (e.g., neighbor, friend):&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="text" id="dropoffOther" name="dropoffOther" placeholder="" style="margin-top: 8px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group" style="margin-top: 25px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label id="pickupLabel"&gt;Pick-up Responsible Person(s) *&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="checkbox-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="checkbox" id="pickup_charindie" name="pickupResponsible" value="Charindie"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="pickup_charindie"&gt;Charindie&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="checkbox" id="pickup_jg" name="pickupResponsible" value="JG"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="pickup_jg"&gt;JG&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="checkbox" id="pickup_annelies" name="pickupResponsible" value="Annelies"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="pickup_annelies"&gt;Annelies&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="checkbox-item"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="checkbox" id="pickup_grandparent" name="pickupResponsible" value="Grandparent"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label for="pickup_grandparent" id="grandparentLabel2"&gt;Grandparent&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="other-driver-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="pickupOther" id="otherPickupLabel"&gt;Other (e.g., neighbor, friend):&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="text" id="pickupOther" name="pickupOther" placeholder="" style="margin-top: 8px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- ADDITIONAL INFO --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="form-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="section-title"&gt;&lt;span id="additionalInfoTitle"&gt;Additional Information&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-row full"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;label for="notes" id="notesLabel"&gt;Notes / Special Instructions&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;textarea id="notes" name="notes" placeholder="e.g., Remember water bottle, permission slip required, lunch needed..."&gt;&lt;/textarea&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- BUTTONS --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="button-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button type="reset" class="btn-reset" id="clearBtn"&gt;Clear&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button type="submit" class="btn-submit" id="submitBtn"&gt;Add Activity&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="loading" id="loading"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="spinner"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p id="syncingText"&gt;Syncing to calendar...&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/form&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Language translations</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const translations = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>en: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title: 'Family Activity Organizer',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>subtitle: 'Coordinate activities for the whole family',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>childInfoTitle: 'Child Information',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>childNameLabel: "Child's Name *",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>activityDetailsTitle: 'Activity Details',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>activityTypeLabel: 'Activity Type *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>otherActivityLabel: 'Activity Name (if Other)',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>dateTimeTitle: 'Date &amp; Time',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>dateLabel: 'Date *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>startTimeLabel: 'Start Time *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>endTimeLabel: 'End Time *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>recurrenceTitle: 'Recurrence (Optional)',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>makeRecurringLabel: 'Make this a recurring activity',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>recurringHelperText: 'Check to repeat this activity every week until a specific date',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>endDateLabel: 'Repeat until (end date) *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>endDateHelperText: 'e.g., end of school term (Nov 30), or last activity date',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>daysLabel: 'Days to repeat on *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>monLabel: 'Monday',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tueLabel: 'Tuesday',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>wedLabel: 'Wednesday',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>thuLabel: 'Thursday',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>friLabel: 'Friday',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>satLabel: 'Saturday',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>sunLabel: 'Sunday',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>daysHelperText: 'Select which days of the week to repeat this activity',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>bringTitle: 'What to Bring',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>bringLabel: 'Remember to bring...',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>bringHelperText: 'Items to bring to this activity. Will be included in reminder notifications.',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>locationTitle: 'Location &amp; Contact',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>locationLabel: 'Location/Venue *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>locationHelperText: 'Include address or specific venue name',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contactPersonLabel: 'Contact Person at Venue',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contactPhoneLabel: 'Contact Phone (if applicable)',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>responsibilitiesTitle: 'Responsibilities',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>dropoffLabel: 'Drop-off Responsible Person(s) *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>pickupLabel: 'Pick-up Responsible Person(s) *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>otherDropoffLabel: 'Other (e.g., neighbor, friend):',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>otherPickupLabel: 'Other (e.g., neighbor, friend):',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grandparentLabel: 'Grandparent',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>additionalInfoTitle: 'Additional Information',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>notesLabel: 'Notes / Special Instructions',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>clearBtn: 'Clear',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>submitBtn: 'Add Activity',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>syncingText: 'Syncing to calendar...',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>successText: 'Activity added successfully!',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>successSeriesText: 'Activity series created! (%d instances)',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorSelectChild: 'Please select a child',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorSelectDropoff: 'Please select at least one person responsible for drop-off',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorSelectPickup: 'Please select at least one person responsible for pick-up',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorEndTime: 'End time must be after start time',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorEndDate: 'Please specify an end date for the recurring activity',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorDateOrder: 'End date must be after start date',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorRecurDays: 'Please select at least one day of the week for recurrence',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorSave: 'Failed to save activity. Please try again.',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>af: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title: 'Gesinaktiwiteit-organiseerder',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>subtitle: 'Koördineer aktiwiteite vir die hele gesin',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>childInfoTitle: 'Kind se Inligting',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>childNameLabel: 'Naam van Kind *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>activityDetailsTitle: 'Aktiwiteit Besonderhede',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>activityTypeLabel: 'Tipe Aktiwiteit *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>otherActivityLabel: 'Aktiwiteit Naam (as Ander)',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>dateTimeTitle: 'Datum &amp; Tyd',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>dateLabel: 'Datum *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>startTimeLabel: 'Begintyd *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>endTimeLabel: 'Eindtyd *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>recurrenceTitle: 'Herhaling (Opsioneel)',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>makeRecurringLabel: 'Maak dit \'n herhalende aktiwiteit',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>recurringHelperText: 'Merk aan om hierdie aktiwiteit elke week te herhaal tot \'n spesifieke datum',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>endDateLabel: 'Herhaal tot (einddatum) *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>endDateHelperText: 'bv., einde van skoolterm (30 Nov), of laaste aktiwiteit datum',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>daysLabel: 'Dae om te herhaal *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>monLabel: 'Maandag',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tueLabel: 'Dinsdag',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>wedLabel: 'Woensdag',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>thuLabel: 'Donderdag',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>friLabel: 'Vrydag',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>satLabel: 'Saterdag',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>sunLabel: 'Sondag',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>daysHelperText: 'Kies watter dae van die week hierdie aktiwiteit herhaal',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>bringTitle: 'Wat om Saam te Neem',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>bringLabel: 'Onthou om saam te neem...',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>bringHelperText: 'Items om saam te neem na hierdie aktiwiteit. Word ingesluit in herinnerings.',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>locationTitle: 'Ligging &amp; Kontakinligting',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>locationLabel: 'Ligging/Venue *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>locationHelperText: 'Sluit adres of spesifieke venuenaam in',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contactPersonLabel: 'Kontakperson by Venue',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contactPhoneLabel: 'Kontakfoon (indien van toepassing)',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>responsibilitiesTitle: 'Verantwoordelikhede',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>dropoffLabel: 'Afsetperson(e) *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>pickupLabel: 'Ophaalperson(e) *',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>otherDropoffLabel: 'Ander (bv., buurman, vriend):',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>otherPickupLabel: 'Ander (bv., buurman, vriend):',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grandparentLabel: 'Oupa/Ouma',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>additionalInfoTitle: 'Addisionele Inligting',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>notesLabel: 'Notas / Spesiale Instruksies',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>clearBtn: 'Wis',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>submitBtn: 'Voeg Aktiwiteit By',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>syncingText: 'Sinkroniseer na kalender...',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>successText: 'Aktiwiteit is suksesvol bygevoeg!',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>successSeriesText: 'Aktiwiteitsreeks geskep! (%d instansies)',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorSelectChild: 'Kies asseblief \'n kind',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorSelectDropoff: 'Kies asseblief minstens een persoon wat verantwoordelik is vir afset',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorSelectPickup: 'Kies asseblief minstens een persoon wat verantwoordelik is vir ophaul',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorEndTime: 'Eindtyd moet na begintyd wees',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorEndDate: 'Gee asseblief \'n einddatum vir die herhalende aktiwiteit',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorDateOrder: 'Einddatum moet na begindatum wees',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorRecurDays: 'Kies asseblief minstens een dag van die week vir herhaling',</p>
-<p class="p1"><span class="Apple-converted-space">                </span>errorSave: 'Kon nie aktiwiteit bespaar nie. Probeer asseblief weer.',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let currentLanguage = 'en';</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function setLanguage(lang) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentLanguage = lang;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.documentElement.lang = lang;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('langEN').classList.toggle('active', lang === 'en');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('langAF').classList.toggle('active', lang === 'af');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const t = translations[lang];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('title').textContent = t.title;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('subtitle').textContent = t.subtitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('childInfoTitle').textContent = t.childInfoTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('childNameLabel').textContent = t.childNameLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('activityDetailsTitle').textContent = t.activityDetailsTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('activityTypeLabel').textContent = t.activityTypeLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('otherActivityLabel').textContent = t.otherActivityLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('dateTimeTitle').textContent = t.dateTimeTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('dateLabel').textContent = t.dateLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('startTimeLabel').textContent = t.startTimeLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('endTimeLabel').textContent = t.endTimeLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('recurrenceTitle').textContent = t.recurrenceTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('makeRecurringLabel').textContent = t.makeRecurringLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('recurringHelperText').textContent = t.recurringHelperText;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('endDateLabel').textContent = t.endDateLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('endDateHelperText').textContent = t.endDateHelperText;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('daysLabel').textContent = t.daysLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('monLabel').textContent = t.monLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('tueLabel').textContent = t.tueLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('wedLabel').textContent = t.wedLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('thuLabel').textContent = t.thuLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('friLabel').textContent = t.friLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('satLabel').textContent = t.satLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('sunLabel').textContent = t.sunLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('daysHelperText').textContent = t.daysHelperText;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('bringTitle').textContent = t.bringTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('bringLabel').textContent = t.bringLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('bringHelperText').textContent = t.bringHelperText;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('locationTitle').textContent = t.locationTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('locationLabel').textContent = t.locationLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('locationHelperText').textContent = t.locationHelperText;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('contactPersonLabel').textContent = t.contactPersonLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('contactPhoneLabel').textContent = t.contactPhoneLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('responsibilitiesTitle').textContent = t.responsibilitiesTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('dropoffLabel').textContent = t.dropoffLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('pickupLabel').textContent = t.pickupLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('otherDropoffLabel').textContent = t.otherDropoffLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('otherPickupLabel').textContent = t.otherPickupLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('grandparentLabel').textContent = t.grandparentLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('grandparentLabel2').textContent = t.grandparentLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('additionalInfoTitle').textContent = t.additionalInfoTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('notesLabel').textContent = t.notesLabel;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('clearBtn').textContent = t.clearBtn;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('submitBtn').textContent = t.submitBtn;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('syncingText').textContent = t.syncingText;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Set today's date as minimum for date picker</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const today = new Date().toISOString().split('T')[0];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('activityDate').setAttribute('min', today);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('recurrenceEndDate').setAttribute('min', today);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Show/hide recurrence options when checkbox is clicked</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('isRecurring').addEventListener('change', function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const recurrenceDiv = document.getElementById('recurrenceOptions');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const endDateInput = document.getElementById('recurrenceEndDate');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (this.checked) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>recurrenceDiv.style.display = 'block';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const startDate = new Date(document.getElementById('activityDate').value);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const suggestedEnd = new Date(startDate.getFullYear(), 10, 30);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (suggestedEnd &gt; startDate) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>endDateInput.value = suggestedEnd.toISOString().split('T')[0];</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>recurrenceDiv.style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>endDateInput.value = '';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.querySelectorAll('input[name="recurDays"]').forEach(cb =&gt; cb.checked = false);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('activityDate').addEventListener('change', function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (document.getElementById('isRecurring').checked) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const startDate = new Date(this.value);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const suggestedEnd = new Date(startDate.getFullYear(), 10, 30);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (suggestedEnd &gt; startDate) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('recurrenceEndDate').value = suggestedEnd.toISOString().split('T')[0];</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('activityForm').addEventListener('submit', async function(e) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const t = translations[currentLanguage];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!document.getElementById('childName').value) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>showError(t.errorSelectChild);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const dropoffChecked = document.querySelectorAll('input[name="dropoffResponsible"]:checked');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const pickupChecked = document.querySelectorAll('input[name="pickupResponsible"]:checked');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const dropoffOther = document.getElementById('dropoffOther').value.trim();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const pickupOther = document.getElementById('pickupOther').value.trim();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (dropoffChecked.length === 0 &amp;&amp; !dropoffOther) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>showError(t.errorSelectDropoff);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (pickupChecked.length === 0 &amp;&amp; !pickupOther) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>showError(t.errorSelectPickup);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const startTime = document.getElementById('startTime').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const endTime = document.getElementById('endTime').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (endTime &lt;= startTime) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>showError(t.errorEndTime);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (document.getElementById('isRecurring').checked) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const endDate = document.getElementById('recurrenceEndDate').value;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (!endDate) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>showError(t.errorEndDate);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const startDate = document.getElementById('activityDate').value;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (endDate &lt; startDate) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>showError(t.errorDateOrder);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const daysChecked = document.querySelectorAll('input[name="recurDays"]:checked');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (daysChecked.length === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>showError(t.errorRecurDays);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>showLoading(true);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const formData = new FormData(this);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const dropoffResponsible = Array.from(dropoffChecked).map(cb =&gt; cb.value);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const pickupResponsible = Array.from(pickupChecked).map(cb =&gt; cb.value);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (dropoffOther) dropoffResponsible.push(dropoffOther);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (pickupOther) pickupResponsible.push(pickupOther);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const recurDays = document.getElementById('isRecurring').checked<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>? Array.from(document.querySelectorAll('input[name="recurDays"]:checked')).map(cb =&gt; cb.value)</p>
-<p class="p1"><span class="Apple-converted-space">                </span>: [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const data = {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>childName: formData.get('childName'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>activityType: formData.get('activityType') === 'Other' ? formData.get('otherActivity') : formData.get('activityType'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>date: formData.get('activityDate'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>startTime: formData.get('startTime'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>endTime: formData.get('endTime'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>location: formData.get('location'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contactPerson: formData.get('contactPerson'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>contactPhone: formData.get('contactPhone'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>dropoffResponsible: dropoffResponsible.join(', '),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>pickupResponsible: pickupResponsible.join(', '),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>notes: formData.get('notes'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>rememberToBring: formData.get('rememberToBring'),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>isRecurring: document.getElementById('isRecurring').checked,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>recurrenceEndDate: formData.get('recurrenceEndDate') || null,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>recurDays: recurDays,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>timestamp: new Date().toISOString()</p>
-<p class="p1"><span class="Apple-converted-space">            </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
-<p class="p3"><span class="s1"><span class="Apple-converted-space">                </span>const response = await fetch('</span>https://script.google.com/macros/s/AKfycbz8ENOjbPPUSdgHVXe3njGRRlFIazZgq5MPveIp032qPO-IXPlUX7np9IThEtQZTNiMdA/exec<span class="s1">', {</span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>method: 'POST',</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>body: JSON.stringify(data)</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (response.ok) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const responseData = await response.json();</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (responseData.success) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>let message = t.successText;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>if (data.isRecurring) {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>message = t.successSeriesText.replace('%d', responseData.instanceCount);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>showSuccess(message);</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>document.getElementById('activityForm').reset();</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>document.getElementById('recurrenceOptions').style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>setTimeout(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>document.getElementById('successMessage').style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>}, 4000);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>showError('Failed: ' + responseData.error);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>showError(t.errorSave);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>showError('Error: ' + error.message);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} finally {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>showLoading(false);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showLoading(show) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('loading').style.display = show ? 'block' : 'none';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showSuccess(message) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const successMsg = document.getElementById('successMessage');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>successMsg.innerHTML = '✓ ' + message;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>successMsg.style.display = 'block';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('errorMessage').style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showError(message) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const errorMsg = document.getElementById('errorMessage');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>errorMsg.textContent = '✗ ' + message;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>errorMsg.style.display = 'block';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('successMessage').style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+    <div class="container">
+        <header>
+            <div class="language-toggle">
+                <button class="lang-btn active" id="langEN" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" id="langAF" onclick="setLanguage('af')">Afrikaans</button>
+            </div>
+            <h1>📅 <span id="title">Family Activity Organizer</span></h1>
+            <p id="subtitle">Coordinate activities for the whole family</p>
+        </header>
+
+        <div class="form-container">
+            <div class="success-message" id="successMessage">
+                ✓ <span id="successText">Activity added successfully!</span>
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+
+            <form id="activityForm">
+                <div class="form-section">
+                    <div class="section-title"><span id="childInfoTitle">Child Information</span></div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="childName" id="childNameLabel">Child's Name *</label>
+                            <select id="childName" name="childName" required>
+                                <option value="">Select a child...</option>
+                                <option value="Wiehan">Wiehan</option>
+                                <option value="Nieke">Nieke</option>
+                                <option value="Anlia">Anlia</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span id="activityDetailsTitle">Activity Details</span></div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="activityType" id="activityTypeLabel">Activity Type *</label>
+                            <select id="activityType" name="activityType" required>
+                                <option value="">Select activity...</option>
+                                <option value="Rugby">🏉 Rugby</option>
+                                <option value="Netball">🏀 Netball</option>
+                                <option value="Hockey">🏑 Hockey</option>
+                                <option value="Math Extra Class">📐 Math Extra Class</option>
+                                <option value="Music Lesson">🎵 Music Lesson</option>
+                                <option value="Swimming">🏊 Swimming</option>
+                                <option value="Tennis">🎾 Tennis</option>
+                                <option value="Dance">💃 Dance</option>
+                                <option value="Tutoring">📚 Tutoring</option>
+                                <option value="Other">📌 Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="otherActivity" id="otherActivityLabel">Activity Name (if Other)</label>
+                            <input type="text" id="otherActivity" name="otherActivity" placeholder="e.g., Piano Lesson">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span id="dateTimeTitle">Date & Time</span></div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="activityDate" id="dateLabel">Date *</label>
+                            <input type="date" id="activityDate" name="activityDate" required>
+                        </div>
+                    </div>
+                    <div class="time-section">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="startTime" id="startTimeLabel">Start Time *</label>
+                                <input type="time" id="startTime" name="startTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="endTime" id="endTimeLabel">End Time *</label>
+                                <input type="time" id="endTime" name="endTime" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span id="recurrenceTitle">Recurrence (Optional)</span></div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="isRecurring" name="isRecurring">
+                                <span id="makeRecurringLabel">Make this a recurring activity</span>
+                            </label>
+                            <div class="helper-text" id="recurringHelperText">Check to repeat this activity every week until a specific date</div>
+                        </div>
+                    </div>
+                    <div id="recurrenceOptions" style="display: none;">
+                        <div class="time-section">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="recurrenceEndDate" id="endDateLabel">Repeat until (end date) *</label>
+                                    <input type="date" id="recurrenceEndDate" name="recurrenceEndDate">
+                                    <div class="helper-text" id="endDateHelperText">e.g., end of school term (Nov 30), or last activity date</div>
+                                </div>
+                                <div class="form-group">
+                                    <label id="daysLabel">Days to repeat on *</label>
+                                    <div class="checkbox-group" style="grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="recurMon" name="recurDays" value="1">
+                                            <label for="recurMon" id="monLabel">Monday</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="recurTue" name="recurDays" value="2">
+                                            <label for="recurTue" id="tueLabel">Tuesday</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="recurWed" name="recurDays" value="3">
+                                            <label for="recurWed" id="wedLabel">Wednesday</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="recurThu" name="recurDays" value="4">
+                                            <label for="recurThu" id="thuLabel">Thursday</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="recurFri" name="recurDays" value="5">
+                                            <label for="recurFri" id="friLabel">Friday</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="recurSat" name="recurDays" value="6">
+                                            <label for="recurSat" id="satLabel">Saturday</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="recurSun" name="recurDays" value="0">
+                                            <label for="recurSun" id="sunLabel">Sunday</label>
+                                        </div>
+                                    </div>
+                                    <div class="helper-text" id="daysHelperText">Select which days of the week to repeat this activity</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span id="bringTitle">What to Bring</span></div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="rememberToBring" id="bringLabel">Remember to bring...</label>
+                            <textarea id="rememberToBring" name="rememberToBring" placeholder="e.g., Water bottle, rugby boots, shin guards, permission slip" style="min-height: 60px;"></textarea>
+                            <div class="helper-text" id="bringHelperText">Items to bring to this activity. Will be included in reminder notifications.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span id="locationTitle">Location & Contact</span></div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="location" id="locationLabel">Location/Venue *</label>
+                            <input type="text" id="location" name="location" placeholder="e.g., Green Fields Sports Complex, Room 5 at School" required>
+                            <div class="helper-text" id="locationHelperText">Include address or specific venue name</div>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="contactPerson" id="contactPersonLabel">Contact Person at Venue</label>
+                            <input type="text" id="contactPerson" name="contactPerson" placeholder="e.g., Coach Mike, Mrs. Johnson">
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="contactPhone" id="contactPhoneLabel">Contact Phone (if applicable)</label>
+                            <input type="text" id="contactPhone" name="contactPhone" placeholder="+27 21 555 1234">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span id="responsibilitiesTitle">Responsibilities</span></div>
+                    
+                    <div class="form-group">
+                        <label id="dropoffLabel">Drop-off Responsible Person(s) *</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="dropoff_charindie" name="dropoffResponsible" value="Charindie">
+                                <label for="dropoff_charindie">Charindie</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="dropoff_jg" name="dropoffResponsible" value="JG">
+                                <label for="dropoff_jg">JG</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="dropoff_annelies" name="dropoffResponsible" value="Annelies">
+                                <label for="dropoff_annelies">Annelies</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="dropoff_grandparent" name="dropoffResponsible" value="Grandparent">
+                                <label for="dropoff_grandparent" id="grandparentLabel">Grandparent</label>
+                            </div>
+                        </div>
+                        <div class="other-driver-section">
+                            <label for="dropoffOther" id="otherDropoffLabel">Other (e.g., neighbor, friend):</label>
+                            <input type="text" id="dropoffOther" name="dropoffOther" placeholder="" style="margin-top: 8px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 25px;">
+                        <label id="pickupLabel">Pick-up Responsible Person(s) *</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pickup_charindie" name="pickupResponsible" value="Charindie">
+                                <label for="pickup_charindie">Charindie</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pickup_jg" name="pickupResponsible" value="JG">
+                                <label for="pickup_jg">JG</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pickup_annelies" name="pickupResponsible" value="Annelies">
+                                <label for="pickup_annelies">Annelies</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pickup_grandparent" name="pickupResponsible" value="Grandparent">
+                                <label for="pickup_grandparent" id="grandparentLabel2">Grandparent</label>
+                            </div>
+                        </div>
+                        <div class="other-driver-section">
+                            <label for="pickupOther" id="otherPickupLabel">Other (e.g., neighbor, friend):</label>
+                            <input type="text" id="pickupOther" name="pickupOther" placeholder="" style="margin-top: 8px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span id="additionalInfoTitle">Additional Information</span></div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="notes" id="notesLabel">Notes / Special Instructions</label>
+                            <textarea id="notes" name="notes" placeholder="e.g., Remember water bottle, permission slip required, lunch needed..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="reset" class="btn-reset" id="clearBtn">Clear</button>
+                    <button type="submit" class="btn-submit" id="submitBtn">Add Activity</button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p id="syncingText">Syncing to calendar...</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: 'Family Activity Organizer',
+                subtitle: 'Coordinate activities for the whole family',
+                childInfoTitle: 'Child Information',
+                childNameLabel: "Child's Name *",
+                activityDetailsTitle: 'Activity Details',
+                activityTypeLabel: 'Activity Type *',
+                otherActivityLabel: 'Activity Name (if Other)',
+                dateTimeTitle: 'Date & Time',
+                dateLabel: 'Date *',
+                startTimeLabel: 'Start Time *',
+                endTimeLabel: 'End Time *',
+                recurrenceTitle: 'Recurrence (Optional)',
+                makeRecurringLabel: 'Make this a recurring activity',
+                recurringHelperText: 'Check to repeat this activity every week until a specific date',
+                endDateLabel: 'Repeat until (end date) *',
+                endDateHelperText: 'e.g., end of school term (Nov 30), or last activity date',
+                daysLabel: 'Days to repeat on *',
+                monLabel: 'Monday',
+                tueLabel: 'Tuesday',
+                wedLabel: 'Wednesday',
+                thuLabel: 'Thursday',
+                friLabel: 'Friday',
+                satLabel: 'Saturday',
+                sunLabel: 'Sunday',
+                daysHelperText: 'Select which days of the week to repeat this activity',
+                bringTitle: 'What to Bring',
+                bringLabel: 'Remember to bring...',
+                bringHelperText: 'Items to bring to this activity. Will be included in reminder notifications.',
+                locationTitle: 'Location & Contact',
+                locationLabel: 'Location/Venue *',
+                locationHelperText: 'Include address or specific venue name',
+                contactPersonLabel: 'Contact Person at Venue',
+                contactPhoneLabel: 'Contact Phone (if applicable)',
+                responsibilitiesTitle: 'Responsibilities',
+                dropoffLabel: 'Drop-off Responsible Person(s) *',
+                pickupLabel: 'Pick-up Responsible Person(s) *',
+                otherDropoffLabel: 'Other (e.g., neighbor, friend):',
+                otherPickupLabel: 'Other (e.g., neighbor, friend):',
+                grandparentLabel: 'Grandparent',
+                additionalInfoTitle: 'Additional Information',
+                notesLabel: 'Notes / Special Instructions',
+                clearBtn: 'Clear',
+                submitBtn: 'Add Activity',
+                syncingText: 'Syncing to calendar...',
+                successText: 'Activity added successfully!',
+                errorSelectChild: 'Please select a child',
+                errorSelectDropoff: 'Please select at least one person responsible for drop-off',
+                errorSelectPickup: 'Please select at least one person responsible for pick-up',
+                errorEndTime: 'End time must be after start time',
+            },
+            af: {
+                title: 'Gesinaktiwiteit-organiseerder',
+                subtitle: 'Koördineer aktiwiteite vir die hele gesin',
+                childInfoTitle: 'Kind se Inligting',
+                childNameLabel: 'Naam van Kind *',
+                activityDetailsTitle: 'Aktiwiteit Besonderhede',
+                activityTypeLabel: 'Tipe Aktiwiteit *',
+                otherActivityLabel: 'Aktiwiteit Naam (as Ander)',
+                dateTimeTitle: 'Datum & Tyd',
+                dateLabel: 'Datum *',
+                startTimeLabel: 'Begintyd *',
+                endTimeLabel: 'Eindtyd *',
+                recurrenceTitle: 'Herhaling (Opsioneel)',
+                makeRecurringLabel: 'Maak dit \'n herhalende aktiwiteit',
+                recurringHelperText: 'Merk aan om hierdie aktiwiteit elke week te herhaal tot \'n spesifieke datum',
+                endDateLabel: 'Herhaal tot (einddatum) *',
+                endDateHelperText: 'bv., einde van skoolterm (30 Nov), of laaste aktiwiteit datum',
+                daysLabel: 'Dae om te herhaal *',
+                monLabel: 'Maandag',
+                tueLabel: 'Dinsdag',
+                wedLabel: 'Woensdag',
+                thuLabel: 'Donderdag',
+                friLabel: 'Vrydag',
+                satLabel: 'Saterdag',
+                sunLabel: 'Sondag',
+                daysHelperText: 'Kies watter dae van die week hierdie aktiwiteit herhaal',
+                bringTitle: 'Wat om Saam te Neem',
+                bringLabel: 'Onthou om saam te neem...',
+                bringHelperText: 'Items om saam te neem na hierdie aktiwiteit. Word ingesluit in herinnerings.',
+                locationTitle: 'Ligging & Kontakinligting',
+                locationLabel: 'Ligging/Venue *',
+                locationHelperText: 'Sluit adres of spesifieke venuenaam in',
+                contactPersonLabel: 'Kontakperson by Venue',
+                contactPhoneLabel: 'Kontakfoon (indien van toepassing)',
+                responsibilitiesTitle: 'Verantwoordelikhede',
+                dropoffLabel: 'Afsetperson(e) *',
+                pickupLabel: 'Ophaalperson(e) *',
+                otherDropoffLabel: 'Ander (bv., buurman, vriend):',
+                otherPickupLabel: 'Ander (bv., buurman, vriend):',
+                grandparentLabel: 'Oupa/Ouma',
+                additionalInfoTitle: 'Addisionele Inligting',
+                notesLabel: 'Notas / Spesiale Instruksies',
+                clearBtn: 'Wis',
+                submitBtn: 'Voeg Aktiwiteit By',
+                syncingText: 'Sinkroniseer na kalender...',
+                successText: 'Aktiwiteit is suksesvol bygevoeg!',
+                errorSelectChild: 'Kies asseblief \'n kind',
+                errorSelectDropoff: 'Kies asseblief minstens een persoon wat verantwoordelik is vir afset',
+                errorSelectPickup: 'Kies asseblief minstens een persoon wat verantwoordelik is vir ophaul',
+                errorEndTime: 'Eindtyd moet na begintyd wees',
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            const t = translations[lang];
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('childInfoTitle').textContent = t.childInfoTitle;
+            document.getElementById('childNameLabel').textContent = t.childNameLabel;
+            document.getElementById('activityDetailsTitle').textContent = t.activityDetailsTitle;
+            document.getElementById('activityTypeLabel').textContent = t.activityTypeLabel;
+            document.getElementById('dateTimeTitle').textContent = t.dateTimeTitle;
+            document.getElementById('dropoffLabel').textContent = t.dropoffLabel;
+            document.getElementById('pickupLabel').textContent = t.pickupLabel;
+            document.getElementById('submitBtn').textContent = t.submitBtn;
+            document.getElementById('langEN').classList.toggle('active', lang === 'en');
+            document.getElementById('langAF').classList.toggle('active', lang === 'af');
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('activityDate').setAttribute('min', today);
+
+        document.getElementById('isRecurring').addEventListener('change', function() {
+            document.getElementById('recurrenceOptions').style.display = this.checked ? 'block' : 'none';
+        });
+
+        document.getElementById('activityForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const t = translations[currentLanguage];
+
+            if (!document.getElementById('childName').value) {
+                alert(t.errorSelectChild);
+                return;
+            }
+
+            alert('Form is ready! Now configure Apps Script to save activities to Google Calendar.');
+        });
+    </script>
 </body>
 </html>
