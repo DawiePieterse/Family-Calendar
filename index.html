@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Activity Organizer | Gesinaktiwiteit-organiseerder</title>
+    <title>De Villiers Organizer | De Villiers organiseerder</title>
     <style>
         * {
             margin: 0;
@@ -219,6 +219,11 @@
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
         .btn-reset {
             background: #f5f5f5;
             color: #666;
@@ -314,6 +319,7 @@
             display: none;
             text-align: center;
             color: #667eea;
+            margin-top: 20px;
         }
 
         .spinner {
@@ -339,7 +345,7 @@
                 <button class="lang-btn active" id="langEN" onclick="setLanguage('en')">English</button>
                 <button class="lang-btn" id="langAF" onclick="setLanguage('af')">Afrikaans</button>
             </div>
-            <h1>📅 <span id="title">Family Activity Organizer</span></h1>
+            <h1>📅 <span id="title">De Villiers Organizer</span></h1>
             <p id="subtitle">Coordinate activities for the whole family</p>
         </header>
 
@@ -373,13 +379,13 @@
                             <select id="activityType" name="activityType" required>
                                 <option value="">Select activity...</option>
                                 <option value="Rugby">🏉 Rugby</option>
+                                <option value="Cricket">🏏 Cricket</option>
                                 <option value="Netball">🏀 Netball</option>
                                 <option value="Hockey">🏑 Hockey</option>
-                                <option value="Math Extra Class">📐 Math Extra Class</option>
+                                <option value="Math Class">📐 Math Class</option>
                                 <option value="Music Lesson">🎵 Music Lesson</option>
                                 <option value="Swimming">🏊 Swimming</option>
                                 <option value="Tennis">🎾 Tennis</option>
-                                <option value="Dance">💃 Dance</option>
                                 <option value="Tutoring">📚 Tutoring</option>
                                 <option value="Other">📌 Other</option>
                             </select>
@@ -487,7 +493,7 @@
                     <div class="form-row full">
                         <div class="form-group">
                             <label for="location" id="locationLabel">Location/Venue *</label>
-                            <input type="text" id="location" name="location" placeholder="e.g., Green Fields Sports Complex, Room 5 at School" required>
+                            <input type="text" id="location" name="location" placeholder="e.g., Eversdal Sports Complex, Room 5 at School" required>
                             <div class="helper-text" id="locationHelperText">Include address or specific venue name</div>
                         </div>
                     </div>
@@ -587,7 +593,7 @@
     <script>
         const translations = {
             en: {
-                title: 'Family Activity Organizer',
+                title: 'De Villiers Organizer',
                 subtitle: 'Coordinate activities for the whole family',
                 childInfoTitle: 'Child Information',
                 childNameLabel: "Child's Name *",
@@ -638,7 +644,7 @@
                 errorEndTime: 'End time must be after start time',
             },
             af: {
-                title: 'Gesinaktiwiteit-organiseerder',
+                title: 'De Villiers organiseerder',
                 subtitle: 'Koördineer aktiwiteite vir die hele gesin',
                 childInfoTitle: 'Kind se Inligting',
                 childNameLabel: 'Naam van Kind *',
@@ -668,18 +674,18 @@
                 bringHelperText: 'Items om saam te neem na hierdie aktiwiteit. Word ingesluit in herinnerings.',
                 locationTitle: 'Ligging & Kontakinligting',
                 locationLabel: 'Ligging/Venue *',
-                locationHelperText: 'Sluit adres of spesifieke venuenaam in',
+                locationHelperText: 'Sluit adres of spesifieke venue naam in',
                 contactPersonLabel: 'Kontakperson by Venue',
-                contactPhoneLabel: 'Kontakfoon (indien van toepassing)',
+                contactPhoneLabel: 'Kontaknommer (indien van toepassing)',
                 responsibilitiesTitle: 'Verantwoordelikhede',
-                dropoffLabel: 'Afsetperson(e) *',
-                pickupLabel: 'Ophaalperson(e) *',
+                dropoffLabel: 'Aflaai person(e) *',
+                pickupLabel: 'Optel person(e) *',
                 otherDropoffLabel: 'Ander (bv., buurman, vriend):',
                 otherPickupLabel: 'Ander (bv., buurman, vriend):',
                 grandparentLabel: 'Oupa/Ouma',
                 additionalInfoTitle: 'Addisionele Inligting',
                 notesLabel: 'Notas / Spesiale Instruksies',
-                clearBtn: 'Wis',
+                clearBtn: 'Vee uit',
                 submitBtn: 'Voeg Aktiwiteit By',
                 syncingText: 'Sinkroniseer na kalender...',
                 successText: 'Aktiwiteit is suksesvol bygevoeg!',
@@ -720,13 +726,108 @@
             e.preventDefault();
             const t = translations[currentLanguage];
 
+            // Validation
             if (!document.getElementById('childName').value) {
-                alert(t.errorSelectChild);
+                showError(t.errorSelectChild);
                 return;
             }
 
-            alert('Form is ready! Now configure Apps Script to save activities to Google Calendar.');
+            const dropoffChecked = document.querySelectorAll('input[name="dropoffResponsible"]:checked');
+            const pickupChecked = document.querySelectorAll('input[name="pickupResponsible"]:checked');
+            const dropoffOther = document.getElementById('dropoffOther').value.trim();
+            const pickupOther = document.getElementById('pickupOther').value.trim();
+
+            if (dropoffChecked.length === 0 && !dropoffOther) {
+                showError(t.errorSelectDropoff);
+                return;
+            }
+            if (pickupChecked.length === 0 && !pickupOther) {
+                showError(t.errorSelectPickup);
+                return;
+            }
+
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            if (endTime <= startTime) {
+                showError(t.errorEndTime);
+                return;
+            }
+
+            showLoading(true);
+            document.getElementById('submitBtn').disabled = true;
+
+            const dropoffResponsible = Array.from(dropoffChecked).map(cb => cb.value);
+            const pickupResponsible = Array.from(pickupChecked).map(cb => cb.value);
+            
+            if (dropoffOther) dropoffResponsible.push(dropoffOther);
+            if (pickupOther) pickupResponsible.push(pickupOther);
+            
+            const recurDays = document.getElementById('isRecurring').checked 
+                ? Array.from(document.querySelectorAll('input[name="recurDays"]:checked')).map(cb => cb.value)
+                : [];
+
+            const data = {
+                childName: document.getElementById('childName').value,
+                activityType: document.getElementById('activityType').value === 'Other' 
+                    ? document.getElementById('otherActivity').value 
+                    : document.getElementById('activityType').value,
+                date: document.getElementById('activityDate').value,
+                startTime: document.getElementById('startTime').value,
+                endTime: document.getElementById('endTime').value,
+                location: document.getElementById('location').value,
+                contactPerson: document.getElementById('contactPerson').value,
+                contactPhone: document.getElementById('contactPhone').value,
+                dropoffResponsible: dropoffResponsible.join(', '),
+                pickupResponsible: pickupResponsible.join(', '),
+                notes: document.getElementById('notes').value,
+                rememberToBring: document.getElementById('rememberToBring').value,
+                isRecurring: document.getElementById('isRecurring').checked,
+                recurrenceEndDate: document.getElementById('recurrenceEndDate').value || null,
+                recurDays: recurDays,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbxs2_UkgU6VA325arP-6u0j4TgZvRq4ntQNBL14YWr5Jk0fsQRMsKaEc6gXNnOd7iNe2A/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                    mode: 'no-cors'
+                });
+
+                showSuccess(t.successText);
+                document.getElementById('activityForm').reset();
+                document.getElementById('recurrenceOptions').style.display = 'none';
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 4000);
+            } catch (error) {
+                showError('Error: ' + error.message);
+            } finally {
+                showLoading(false);
+                document.getElementById('submitBtn').disabled = false;
+            }
         });
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function showSuccess(message) {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.innerHTML = '✓ ' + message;
+            successMsg.style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMessage');
+            errorMsg.textContent = '✗ ' + message;
+            errorMsg.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
     </script>
 </body>
 </html>
